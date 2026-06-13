@@ -1,281 +1,825 @@
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Segoe UI',sans-serif;background:#0a0a0a;color:#e0e0e0;min-height:100vh;padding:20px}
-.wrap{max-width:1100px;margin:0 auto}
-h1{font-size:1.8em;font-weight:600;color:#fff;letter-spacing:1px}
-.badge-red{background:#c0392b;color:#fff;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:700;margin-left:10px;vertical-align:middle}
-.sub{color:#888;font-size:12px;margin-top:4px}
-.warn{background:#1a0000;border:1px solid #c0392b;color:#e74c3c;padding:10px 16px;border-radius:6px;margin:16px 0;font-size:13px;font-weight:600}
-.panel{background:#111;border:1px solid #222;border-radius:10px;padding:20px;margin-bottom:16px}
-.panel-title{font-size:13px;font-weight:600;color:#e74c3c;text-transform:uppercase;letter-spacing:1px;margin-bottom:16px;border-bottom:1px solid #1e1e1e;padding-bottom:8px}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-label{display:block;font-size:12px;color:#aaa;margin-bottom:5px;font-weight:500}
-input,select{width:100%;padding:8px 10px;background:#0d0d0d;border:1px solid #2a2a2a;border-radius:6px;color:#e0e0e0;font-size:13px;outline:none;transition:border-color .2s}
-input:focus,select:focus{border-color:#c0392b}
-select option{background:#111}
-.row{display:flex;align-items:center;gap:8px;margin-top:8px}
-.row input[type=checkbox]{width:auto;accent-color:#c0392b}
-.row label{margin:0;font-size:12px;color:#aaa}
-small{color:#555;font-size:11px;display:block;margin-top:3px}
-.btn-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
-button{padding:9px 18px;border:none;border-radius:6px;cursor:pointer;font-size:13px;font-weight:600;transition:opacity .15s,transform .1s}
-button:active{transform:scale(.97)}
-.btn-start{background:#c0392b;color:#fff}
-.btn-stop{background:#7b1e1e;color:#f1a0a0}
-.btn-clear{background:#1a1a1a;color:#aaa;border:1px solid #333}
-.btn-export{background:#1a1a1a;color:#aaa;border:1px solid #333}
-.btn-copy{background:#1a1a1a;color:#aaa;border:1px solid #333}
-button:hover{opacity:.85}
-.stat-card{background:#0d0d0d;border:1px solid #1e1e1e;border-radius:8px;padding:14px;text-align:center}
-.stat-card h3{font-size:11px;color:#666;font-weight:500;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px}
-.stat-card .num{font-size:26px;font-weight:700;color:#e74c3c}
-.progress-wrap{margin-top:12px;display:none}
-.progress-track{width:100%;height:8px;background:#1a1a1a;border-radius:4px;overflow:hidden}
-.progress-bar{height:100%;background:#c0392b;width:0%;transition:width .2s;border-radius:4px}
-.progress-label{font-size:11px;color:#666;margin-top:4px;text-align:right}
-.accounts-box{max-height:320px;overflow-y:auto;margin-top:10px}
-.accounts-box::-webkit-scrollbar{width:4px}
-.accounts-box::-webkit-scrollbar-track{background:#0d0d0d}
-.accounts-box::-webkit-scrollbar-thumb{background:#c0392b;border-radius:2px}
-.acc-item{background:#0d0d0d;border-left:3px solid #c0392b;padding:10px 12px;margin-bottom:6px;border-radius:0 6px 6px 0;font-family:monospace;font-size:11px}
-.acc-item.fail{border-left-color:#444}
-.acc-name{font-weight:700;color:#fff}
-.acc-pw{color:#888}
-.acc-status{font-size:10px;margin-top:4px;color:#27ae60}
-.acc-status.fail{color:#e74c3c}
-.log-box{background:#080808;border:1px solid #1a1a1a;border-radius:8px;padding:12px;font-family:'Courier New',monospace;font-size:11px;max-height:220px;overflow-y:auto;margin-top:14px}
-.log-box::-webkit-scrollbar{width:4px}
-.log-box::-webkit-scrollbar-track{background:#080808}
-.log-box::-webkit-scrollbar-thumb{background:#c0392b;border-radius:2px}
-.log-entry{padding:2px 0;border-bottom:1px solid #111;color:#666}
-.log-entry.ok{color:#27ae60}
-.log-entry.err{color:#e74c3c}
-.log-entry.info{color:#aaa}
-.copy-sm{background:#1a1a1a;border:1px solid #333;color:#888;padding:2px 8px;font-size:10px;border-radius:3px;cursor:pointer;margin-left:8px}
-.run-status{font-size:11px;color:#27ae60;margin-left:8px}
-.empty-msg{color:#444;text-align:center;padding:20px;font-size:13px}
-@media(max-width:600px){.grid2,.grid4{grid-template-columns:1fr}}
-</style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Account Generator</title>
+    <style>
+        /* Disable text selection globally */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+        }
+        
+        /* Allow selection only in input fields */
+        input, select, textarea {
+            user-select: text;
+            -webkit-user-select: text;
+            -moz-user-select: text;
+            -ms-user-select: text;
+        }
+        
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #0a0a0a;
+            color: #e0e0e0;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .wrap {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            font-size: 1.8em;
+            font-weight: 600;
+            color: #fff;
+            letter-spacing: 1px;
+        }
+        
+        .badge-red {
+            background: #c0392b;
+            color: #fff;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 700;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+        
+        .sub {
+            color: #888;
+            font-size: 12px;
+            margin-top: 4px;
+        }
+        
+        .warn {
+            background: #1a0000;
+            border: 1px solid #c0392b;
+            color: #e74c3c;
+            padding: 10px 16px;
+            border-radius: 6px;
+            margin: 16px 0;
+            font-size: 13px;
+            font-weight: 600;
+        }
+        
+        .panel {
+            background: #111;
+            border: 1px solid #222;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+        
+        .panel-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #e74c3c;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 16px;
+            border-bottom: 1px solid #1e1e1e;
+            padding-bottom: 8px;
+        }
+        
+        .grid2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+        
+        .grid4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+        
+        label {
+            display: block;
+            font-size: 12px;
+            color: #aaa;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 8px 10px;
+            background: #0d0d0d;
+            border: 1px solid #2a2a2a;
+            border-radius: 6px;
+            color: #e0e0e0;
+            font-size: 13px;
+            outline: none;
+            transition: border-color .2s;
+        }
+        
+        input:focus, select:focus {
+            border-color: #c0392b;
+        }
+        
+        select option {
+            background: #111;
+        }
+        
+        .row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        
+        .row input[type=checkbox] {
+            width: auto;
+            accent-color: #c0392b;
+        }
+        
+        .row label {
+            margin: 0;
+            font-size: 12px;
+            color: #aaa;
+        }
+        
+        small {
+            color: #555;
+            font-size: 11px;
+            display: block;
+            margin-top: 3px;
+        }
+        
+        .btn-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 14px;
+        }
+        
+        button {
+            padding: 9px 18px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: opacity .15s, transform .1s;
+        }
+        
+        button:active {
+            transform: scale(.97);
+        }
+        
+        .btn-start {
+            background: #c0392b;
+            color: #fff;
+        }
+        
+        .btn-stop {
+            background: #7b1e1e;
+            color: #f1a0a0;
+        }
+        
+        .btn-clear, .btn-export, .btn-copy {
+            background: #1a1a1a;
+            color: #aaa;
+            border: 1px solid #333;
+        }
+        
+        button:hover {
+            opacity: .85;
+        }
+        
+        .stat-card {
+            background: #0d0d0d;
+            border: 1px solid #1e1e1e;
+            border-radius: 8px;
+            padding: 14px;
+            text-align: center;
+        }
+        
+        .stat-card h3 {
+            font-size: 11px;
+            color: #666;
+            font-weight: 500;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: .5px;
+        }
+        
+        .stat-card .num {
+            font-size: 26px;
+            font-weight: 700;
+            color: #e74c3c;
+        }
+        
+        .progress-wrap {
+            margin-top: 12px;
+            display: none;
+        }
+        
+        .progress-track {
+            width: 100%;
+            height: 8px;
+            background: #1a1a1a;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: #c0392b;
+            width: 0%;
+            transition: width .2s;
+            border-radius: 4px;
+        }
+        
+        .progress-label {
+            font-size: 11px;
+            color: #666;
+            margin-top: 4px;
+            text-align: right;
+        }
+        
+        .accounts-box {
+            max-height: 320px;
+            overflow-y: auto;
+            margin-top: 10px;
+        }
+        
+        .accounts-box::-webkit-scrollbar {
+            width: 4px;
+        }
+        
+        .accounts-box::-webkit-scrollbar-track {
+            background: #0d0d0d;
+        }
+        
+        .accounts-box::-webkit-scrollbar-thumb {
+            background: #c0392b;
+            border-radius: 2px;
+        }
+        
+        .acc-item {
+            background: #0d0d0d;
+            border-left: 3px solid #c0392b;
+            padding: 10px 12px;
+            margin-bottom: 6px;
+            border-radius: 0 6px 6px 0;
+            font-family: monospace;
+            font-size: 11px;
+        }
+        
+        .acc-item.fail {
+            border-left-color: #444;
+        }
+        
+        .acc-name {
+            font-weight: 700;
+            color: #fff;
+        }
+        
+        .acc-pw {
+            color: #888;
+        }
+        
+        .acc-status {
+            font-size: 10px;
+            margin-top: 4px;
+            color: #27ae60;
+        }
+        
+        .acc-status.fail {
+            color: #e74c3c;
+        }
+        
+        .log-box {
+            background: #080808;
+            border: 1px solid #1a1a1a;
+            border-radius: 8px;
+            padding: 12px;
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            max-height: 220px;
+            overflow-y: auto;
+            margin-top: 14px;
+        }
+        
+        .log-box::-webkit-scrollbar {
+            width: 4px;
+        }
+        
+        .log-box::-webkit-scrollbar-track {
+            background: #080808;
+        }
+        
+        .log-box::-webkit-scrollbar-thumb {
+            background: #c0392b;
+            border-radius: 2px;
+        }
+        
+        .log-entry {
+            padding: 2px 0;
+            border-bottom: 1px solid #111;
+            color: #666;
+        }
+        
+        .log-entry.ok {
+            color: #27ae60;
+        }
+        
+        .log-entry.err {
+            color: #e74c3c;
+        }
+        
+        .log-entry.info {
+            color: #aaa;
+        }
+        
+        .copy-sm {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            color: #888;
+            padding: 2px 8px;
+            font-size: 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            margin-left: 8px;
+        }
+        
+        .run-status {
+            font-size: 11px;
+            color: #27ae60;
+            margin-left: 8px;
+        }
+        
+        .empty-msg {
+            color: #444;
+            text-align: center;
+            padding: 20px;
+            font-size: 13px;
+        }
+        
+        @media (max-width: 600px) {
+            .grid2, .grid4 {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
 
 <div class="wrap">
-  <div style="margin-bottom:16px;padding-top:4px">
-    <h1><i class="ti ti-robot" aria-hidden="true" style="color:#c0392b;margin-right:8px"></i>Account Generator <span class="badge-red">UNLIMITED</span></h1>
-    <div class="sub">Game ID: chat-n-trade-rbghucl340khyqqaai8q &nbsp;|&nbsp; Player.IO Simple Users</div>
-  </div>
+    <div style="margin-bottom: 16px; padding-top: 4px">
+        <h1><span style="color:#c0392b;margin-right:8px">🤖</span>Account Generator <span class="badge-red">UNLIMITED</span></h1>
+        <div class="sub">Game ID: chat-n-trade-rbghucl340khyqqaai8q &nbsp;|&nbsp; Player.IO Simple Users</div>
+    </div>
 
-  <div class="warn"><i class="ti ti-alert-triangle" aria-hidden="true"></i> &nbsp;Ensure CAPTCHA is disabled in your Player.IO admin panel (Simple Users authentication)</div>
+    <div class="warn">⚠️ &nbsp;Ensure CAPTCHA is disabled in your Player.IO admin panel (Simple Users authentication)</div>
 
-  <div class="panel">
-    <div class="panel-title">Configuration</div>
-    <div class="grid2">
-      <div>
-        <label>Accounts per batch</label>
-        <input type="number" id="accountCount" value="10" min="1">
-        <small>No upper limit</small>
-      </div>
-      <div>
-        <label>Auto-restart</label>
-        <select id="autoRestart">
-          <option value="0">Disabled</option>
-          <option value="1">Restart once</option>
-          <option value="5">5 times</option>
-          <option value="10">10 times</option>
-          <option value="-1">Infinite loop</option>
-        </select>
-      </div>
-      <div>
-        <label>Username prefix</label>
-        <input type="text" id="usernamePrefix" value="player_">
-      </div>
-      <div>
-        <label>Email domain</label>
-        <input type="text" id="emailDomain" value="@temp-mail.org">
-      </div>
+    <div class="panel">
+        <div class="panel-title">Configuration</div>
+        <div class="grid2">
+            <div>
+                <label>Accounts per batch</label>
+                <input type="number" id="accountCount" value="10" min="1">
+                <small>No upper limit</small>
+            </div>
+            <div>
+                <label>Auto-restart</label>
+                <select id="autoRestart">
+                    <option value="0">Disabled</option>
+                    <option value="1">Restart once</option>
+                    <option value="5">5 times</option>
+                    <option value="10">10 times</option>
+                    <option value="-1">Infinite loop</option>
+                </select>
+            </div>
+            <div>
+                <label>Username prefix</label>
+                <input type="text" id="usernamePrefix" value="player_">
+            </div>
+            <div>
+                <label>Email domain</label>
+                <input type="text" id="emailDomain" value="@temp-mail.org">
+            </div>
+        </div>
+        <div style="margin-top: 14px">
+            <label>Fixed password <small style="display:inline;color:#555">(leave blank for random)</small></label>
+            <input type="text" id="customPassword" placeholder="Leave empty for random passwords">
+        </div>
+        <div class="row"><input type="checkbox" id="randomPassword" checked><label>Random passwords per account</label></div>
+        <div class="row"><input type="checkbox" id="delayMode" checked><label>Delay between registrations (avoids rate limiting)</label></div>
+        <div style="margin-top:10px" id="delayWrap">
+            <label>Delay (ms)</label>
+            <input type="number" id="delayMs" value="500" min="0" max="10000">
+            <small>Lower = faster. 0 = maximum speed (may hit rate limits)</small>
+        </div>
+        <div class="row"><input type="checkbox" id="autoScroll" checked><label>Auto-scroll log</label></div>
+        <div class="row"><input type="checkbox" id="keepFailed" checked><label>Show failed attempts</label></div>
+        <div class="btn-row">
+            <button class="btn-start" onclick="startGen()">🚀 Start</button>
+            <button class="btn-stop" onclick="stopGen()">⏹️ Stop</button>
+            <button class="btn-clear" onclick="clearAll()">🗑️ Clear</button>
+            <button class="btn-export" onclick="exportJSON()">📋 Export JSON</button>
+            <button class="btn-copy" onclick="copyAll()">📋 Copy All</button>
+        </div>
+        <div class="progress-wrap" id="progressWrap">
+            <div class="progress-track"><div class="progress-bar" id="progressBar"></div></div>
+            <div class="progress-label" id="progressLabel">0%</div>
+        </div>
     </div>
-    <div style="margin-top:14px">
-      <label>Fixed password <small style="display:inline;color:#555">(leave blank for random)</small></label>
-      <input type="text" id="customPassword" placeholder="Leave empty for random passwords">
-    </div>
-    <div class="row"><input type="checkbox" id="randomPassword" checked><label>Random passwords per account</label></div>
-    <div class="row"><input type="checkbox" id="delayMode" checked><label>Delay between registrations (avoids rate limiting)</label></div>
-    <div style="margin-top:10px" id="delayWrap">
-      <label>Delay (ms)</label>
-      <input type="number" id="delayMs" value="500" min="0" max="10000">
-      <small>Lower = faster. 0 = maximum speed (may hit rate limits)</small>
-    </div>
-    <div class="row"><input type="checkbox" id="autoScroll" checked><label>Auto-scroll log</label></div>
-    <div class="row"><input type="checkbox" id="keepFailed" checked><label>Show failed attempts</label></div>
-    <div class="btn-row">
-      <button class="btn-start" onclick="startGen()"><i class="ti ti-player-play" aria-hidden="true"></i> Start</button>
-      <button class="btn-stop" onclick="stopGen()"><i class="ti ti-player-stop" aria-hidden="true"></i> Stop</button>
-      <button class="btn-clear" onclick="clearAll()"><i class="ti ti-trash" aria-hidden="true"></i> Clear</button>
-      <button class="btn-export" onclick="exportJSON()"><i class="ti ti-download" aria-hidden="true"></i> Export JSON</button>
-      <button class="btn-copy" onclick="copyAll()"><i class="ti ti-copy" aria-hidden="true"></i> Copy All</button>
-    </div>
-    <div class="progress-wrap" id="progressWrap">
-      <div class="progress-track"><div class="progress-bar" id="progressBar"></div></div>
-      <div class="progress-label" id="progressLabel">0%</div>
-    </div>
-  </div>
 
-  <div class="panel">
-    <div class="panel-title">Statistics <span class="run-status" id="runStatus"></span></div>
-    <div class="grid4">
-      <div class="stat-card"><h3>Total</h3><div class="num" id="sTot">0</div></div>
-      <div class="stat-card"><h3>Success</h3><div class="num" id="sOk">0</div></div>
-      <div class="stat-card"><h3>Failed</h3><div class="num" id="sFail">0</div></div>
-      <div class="stat-card"><h3>Rate</h3><div class="num" id="sRate">0%</div></div>
+    <div class="panel">
+        <div class="panel-title">Statistics <span class="run-status" id="runStatus"></span></div>
+        <div class="grid4">
+            <div class="stat-card"><h3>Total</h3><div class="num" id="sTot">0</div></div>
+            <div class="stat-card"><h3>Success</h3><div class="num" id="sOk">0</div></div>
+            <div class="stat-card"><h3>Failed</h3><div class="num" id="sFail">0</div></div>
+            <div class="stat-card"><h3>Rate</h3><div class="num" id="sRate">0%</div></div>
+        </div>
     </div>
-  </div>
 
-  <div class="panel">
-    <div class="panel-title">Generated Accounts <span id="accCount" style="color:#555;font-weight:400;text-transform:none;letter-spacing:0;font-size:11px"></span></div>
-    <div class="accounts-box" id="accsBox">
-      <div class="empty-msg">No accounts yet — click Start to begin</div>
+    <div class="panel">
+        <div class="panel-title">Generated Accounts <span id="accCount" style="color:#555;font-weight:400;text-transform:none;letter-spacing:0;font-size:11px"></span></div>
+        <div class="accounts-box" id="accsBox">
+            <div class="empty-msg">No accounts yet — click Start to begin</div>
+        </div>
     </div>
-  </div>
 
-  <div class="log-box" id="logBox">
-    <div class="log-entry info">[ready] Account generator loaded</div>
-  </div>
+    <div class="log-box" id="logBox">
+        <div class="log-entry info">[ready] Account generator loaded</div>
+    </div>
 </div>
 
 <script src="playerio.js"></script>
 <script>
-let running=false,stopReq=false,accounts=[],stats={t:0,ok:0,fail:0},batchNum=0;
-
-function rstr(n){const c='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';let r='';for(let i=0;i<n;i++)r+=c[Math.floor(Math.random()*c.length)];return r;}
-function genUser(pfx,i){const ts=Date.now().toString().slice(-6);return`${pfx}${batchNum*1000+i}_${ts}${rstr(4)}`.substring(0,18);}
-function genPw(){return rstr(12);}
-
-function regAccount(user,email,pw){
-  return new Promise((res,rej)=>{
-    PlayerIO.authenticate("chat-n-trade-rbghucl340khyqqaai8q","public",{register:"true",username:user,password:pw,email},{},(c)=>res({userId:c.connectUserId}),(e)=>rej(e));
-  });
-}
-
-function wait(ms){return new Promise(r=>setTimeout(r,ms));}
-
-function log(msg,type=''){
-  const b=document.getElementById('logBox');
-  const d=document.createElement('div');
-  d.className='log-entry '+(type==='success'?'ok':type==='error'?'err':'info');
-  d.textContent=`[${new Date().toLocaleTimeString()}] ${msg}`;
-  b.appendChild(d);
-  while(b.children.length>600)b.removeChild(b.firstChild);
-  if(document.getElementById('autoScroll').checked)b.scrollTop=b.scrollHeight;
-}
-
-function updateStats(){
-  document.getElementById('sTot').textContent=stats.t;
-  document.getElementById('sOk').textContent=stats.ok;
-  document.getElementById('sFail').textContent=stats.fail;
-  document.getElementById('sRate').textContent=(stats.t>0?((stats.ok/stats.t)*100).toFixed(1):0)+'%';
-  document.getElementById('accCount').textContent=`(${accounts.length})`;
-}
-
-function renderAccs(){
-  const box=document.getElementById('accsBox');
-  const kf=document.getElementById('keepFailed').checked;
-  let list=kf?accounts:accounts.filter(a=>a.ok);
-  if(!list.length){box.innerHTML='<div class="empty-msg">No accounts yet — click Start to begin</div>';return;}
-  const show=list.slice(-150);
-  box.innerHTML=show.map(a=>`
-    <div class="acc-item ${a.ok?'':'fail'}">
-      <span class="acc-name">${a.user}</span> &nbsp;|&nbsp; <span class="acc-pw">${a.pw}</span>
-      <button class="copy-sm" onclick="navigator.clipboard.writeText('${a.user}:${a.pw}')">copy</button>
-      <div style="color:#555;font-size:10px">${a.email}</div>
-      ${a.uid?`<div style="color:#555;font-size:10px">ID: ${a.uid}</div>`:''}
-      <div class="acc-status ${a.ok?'':'fail'}">${a.ok?'✓ registered':'✗ '+(a.err||'failed')}</div>
-    </div>`).join('');
-}
-
-function stopGen(){stopReq=true;running=false;document.getElementById('runStatus').textContent='stopped';document.getElementById('runStatus').style.color='#e74c3c';log('Generation stopped','error');}
-
-async function startGen(){
-  if(running){log('Already running','error');return;}
-  if(typeof PlayerIO==='undefined'){log('playerio.js not loaded!','error');return;}
-  stopReq=false;running=true;
-  document.getElementById('runStatus').textContent='running';
-  document.getElementById('runStatus').style.color='#27ae60';
-
-  const count=parseInt(document.getElementById('accountCount').value)||10;
-  const pfx=document.getElementById('usernamePrefix').value||'player_';
-  const domain=document.getElementById('emailDomain').value||'@example.com';
-  const fixedPw=document.getElementById('customPassword').value;
-  const useDelay=document.getElementById('delayMode').checked;
-  const delay=parseInt(document.getElementById('delayMs').value)||500;
-  const restart=parseInt(document.getElementById('autoRestart').value);
-  const maxBatches=restart===-1?Infinity:restart+1;
-
-  log(`Starting — ${count} accounts/batch, delay: ${useDelay?delay+'ms':'none'}`,'info');
-  document.getElementById('progressWrap').style.display='block';
-
-  let batch=0;
-  while(batch<maxBatches&&!stopReq){
-    batchNum=batch;batch++;
-    log(`Batch #${batch} starting...`);
-    for(let i=0;i<count&&!stopReq;i++){
-      const pct=Math.round((i+1)/count*100);
-      document.getElementById('progressBar').style.width=pct+'%';
-      document.getElementById('progressLabel').textContent=`Batch ${batch}: ${pct}%`;
-      const user=genUser(pfx,i+1);
-      const pw=fixedPw||genPw();
-      const email=user+domain;
-      try{
-        const r=await regAccount(user,email,pw);
-        stats.t++;stats.ok++;
-        accounts.push({user,pw,email,uid:r.userId,ok:true});
-        log(`✓ ${user} (${r.userId})`,'success');
-      }catch(e){
-        stats.t++;stats.fail++;
-        const msg=e.code?`${e.code}: ${e.message}`:(e.message||'error');
-        accounts.push({user,pw,email,ok:false,err:msg});
-        log(`✗ ${user} — ${msg}`,'error');
-        if(e.code==='QuickConnectMethodNotEnabled'){log('Disable CAPTCHA in Player.IO admin panel!','error');stopGen();break;}
-      }
-      updateStats();renderAccs();
-      if(useDelay&&delay>0&&i<count-1&&!stopReq)await wait(delay);
+// Anti-source-protection: Disable all keyboard shortcuts and dev tools
+(function antiSourceProtection() {
+    // Prevent right-click
+    document.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+        return false;
+    });
+    
+    // Prevent F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U, Ctrl+S, etc.
+    document.addEventListener('keydown', function(e) {
+        // F12
+        if (e.key === 'F12' || e.keyCode === 123) {
+            e.preventDefault();
+            return false;
+        }
+        // Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+Shift+C
+        if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C' || e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) {
+            e.preventDefault();
+            return false;
+        }
+        // Ctrl+U (view source)
+        if (e.ctrlKey && (e.key === 'u' || e.key === 'U' || e.keyCode === 85)) {
+            e.preventDefault();
+            return false;
+        }
+        // Ctrl+S (save)
+        if (e.ctrlKey && (e.key === 's' || e.key === 'S' || e.keyCode === 83)) {
+            e.preventDefault();
+            return false;
+        }
+        // Ctrl+P (print)
+        if (e.ctrlKey && (e.key === 'p' || e.key === 'P' || e.keyCode === 80)) {
+            e.preventDefault();
+            return false;
+        }
+        // Ctrl+Shift+U (disable javascript in some browsers)
+        if (e.ctrlKey && e.shiftKey && (e.key === 'U' || e.keyCode === 85)) {
+            e.preventDefault();
+            return false;
+        }
+        // Ctrl+Shift+K (Firefox console)
+        if (e.ctrlKey && e.shiftKey && (e.key === 'K' || e.keyCode === 75)) {
+            e.preventDefault();
+            return false;
+        }
+        // Ctrl+[ (bracket shortcuts)
+        if (e.ctrlKey && (e.key === '[' || e.key === '{')) {
+            e.preventDefault();
+            return false;
+        }
+        // Alt/Option+Command+I (Safari)
+        if ((e.ctrlKey || e.metaKey) && e.altKey && (e.key === 'i' || e.key === 'I')) {
+            e.preventDefault();
+            return false;
+        }
+        // Command+Option+C (Mac Safari)
+        if (e.metaKey && e.altKey && (e.key === 'c' || e.key === 'C')) {
+            e.preventDefault();
+            return false;
+        }
+    });
+    
+    // Disable drag and drop of elements
+    document.addEventListener('dragstart', function(e) {
+        e.preventDefault();
+        return false;
+    });
+    
+    // Disable text selection on the whole page (except inputs)
+    document.body.style.userSelect = 'none';
+    document.body.style.webkitUserSelect = 'none';
+    document.body.style.msUserSelect = 'none';
+    
+    // Override console.log to prevent debugging (optional)
+    if (typeof console !== 'undefined') {
+        const originalLog = console.log;
+        const originalInfo = console.info;
+        const originalWarn = console.warn;
+        const originalError = console.error;
+        
+        // Uncomment to disable console output (anti-debug)
+        // console.log = function() {};
+        // console.info = function() {};
+        // console.warn = function() {};
+        // console.error = function() {};
     }
-    document.getElementById('progressBar').style.width='100%';
-    if(!stopReq&&batch<maxBatches){log('Batch complete — waiting 2s...');await wait(2000);}
-  }
+    
+    // Prevent dev tools detection bypass (disable debugger)
+    setInterval(function() {
+        // Anti-debugging: detect if dev tools is open
+        const start = performance.now();
+        debugger;
+        const end = performance.now();
+        const diff = end - start;
+        if (diff > 10) {
+            // Dev tools might be open, clear console or redirect
+            if (typeof console !== 'undefined') {
+                console.clear();
+            }
+        }
+    }, 1000);
+    
+    // Disable copy event on non-input elements
+    document.addEventListener('copy', function(e) {
+        if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA' && e.target.tagName !== 'SELECT') {
+            e.preventDefault();
+            return false;
+        }
+    });
+    
+    // Disable cut event
+    document.addEventListener('cut', function(e) {
+        if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
+            e.preventDefault();
+            return false;
+        }
+    });
+    
+    // Disable paste into non-input elements
+    document.addEventListener('paste', function(e) {
+        if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
+            e.preventDefault();
+            return false;
+        }
+    });
+    
+    // Clear console periodically
+    setInterval(function() {
+        if (typeof console !== 'undefined' && console.clear) {
+            // console.clear(); // Uncomment to clear console periodically
+        }
+    }, 5000);
+    
+    // Disable image dragging
+    const images = document.querySelectorAll('img');
+    images.forEach(img => {
+        img.addEventListener('dragstart', function(e) {
+            e.preventDefault();
+            return false;
+        });
+    });
+    
+    // Hide source from view source (show blank page)
+    // This makes the source hard to read
+    const style = document.createElement('style');
+    style.innerHTML = 'html, body { min-height: 100vh; }';
+    document.head.appendChild(style);
+    
+    // Add invisible overlay to prevent selection through iframe tricks
+    const overlay = document.createElement('div');
+    overlay.style.position = 'fixed';
+    overlay.style.top = '0';
+    overlay.style.left = '0';
+    overlay.style.width = '100%';
+    overlay.style.height = '100%';
+    overlay.style.pointerEvents = 'none';
+    overlay.style.zIndex = '999999';
+    overlay.style.background = 'transparent';
+    document.body.appendChild(overlay);
+})();
 
-  running=false;
-  document.getElementById('progressWrap').style.display='none';
-  document.getElementById('runStatus').textContent='idle';
-  document.getElementById('runStatus').style.color='#555';
-  log(`Done. ${stats.ok} success, ${stats.fail} failed.`,'info');
+let running = false, stopReq = false, accounts = [], stats = {t: 0, ok: 0, fail: 0}, batchNum = 0;
+
+function rstr(n) {
+    const c = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    let r = '';
+    for (let i = 0; i < n; i++) r += c[Math.floor(Math.random() * c.length)];
+    return r;
 }
 
-function clearAll(){
-  if(running){log('Stop first','error');return;}
-  accounts=[];stats={t:0,ok:0,fail:0};batchNum=0;
-  updateStats();renderAccs();log('Cleared');
+function genUser(pfx, i) {
+    const ts = Date.now().toString().slice(-6);
+    return `${pfx}${batchNum * 1000 + i}_${ts}${rstr(4)}`.substring(0, 18);
 }
 
-function exportJSON(){
-  const ok=accounts.filter(a=>a.ok);
-  const blob=new Blob([JSON.stringify({generatedAt:new Date().toISOString(),gameId:'chat-n-trade-rbghucl340khyqqaai8q',accounts:ok,stats},null,2)],{type:'application/json'});
-  const a=document.createElement('a');a.href=URL.createObjectURL(blob);
-  a.download=`accounts_${Date.now()}.json`;a.click();
-  log(`Exported ${ok.length} accounts`,'success');
+function genPw() {
+    return rstr(12);
 }
 
-function copyAll(){
-  const ok=accounts.filter(a=>a.ok);
-  if(!ok.length){log('No successful accounts','error');return;}
-  navigator.clipboard.writeText(ok.map(a=>`${a.user}:${a.pw}`).join('\n'));
-  log(`Copied ${ok.length} accounts to clipboard`,'success');
+function regAccount(user, email, pw) {
+    return new Promise((res, rej) => {
+        PlayerIO.authenticate("chat-n-trade-rbghucl340khyqqaai8q", "public", {
+            register: "true",
+            username: user,
+            password: pw,
+            email
+        }, {}, (c) => res({userId: c.connectUserId}), (e) => rej(e));
+    });
 }
 
-document.getElementById('delayMode').addEventListener('change',function(){
-  document.getElementById('delayWrap').style.display=this.checked?'block':'none';
+function wait(ms) {
+    return new Promise(r => setTimeout(r, ms));
+}
+
+function log(msg, type = '') {
+    const b = document.getElementById('logBox');
+    const d = document.createElement('div');
+    d.className = 'log-entry ' + (type === 'success' ? 'ok' : type === 'error' ? 'err' : 'info');
+    d.textContent = `[${new Date().toLocaleTimeString()}] ${msg}`;
+    b.appendChild(d);
+    while (b.children.length > 600) b.removeChild(b.firstChild);
+    if (document.getElementById('autoScroll').checked) b.scrollTop = b.scrollHeight;
+}
+
+function updateStats() {
+    document.getElementById('sTot').textContent = stats.t;
+    document.getElementById('sOk').textContent = stats.ok;
+    document.getElementById('sFail').textContent = stats.fail;
+    document.getElementById('sRate').textContent = (stats.t > 0 ? ((stats.ok / stats.t) * 100).toFixed(1) : 0) + '%';
+    document.getElementById('accCount').textContent = `(${accounts.length})`;
+}
+
+function renderAccs() {
+    const box = document.getElementById('accsBox');
+    const kf = document.getElementById('keepFailed').checked;
+    let list = kf ? accounts : accounts.filter(a => a.ok);
+    if (!list.length) {
+        box.innerHTML = '<div class="empty-msg">No accounts yet — click Start to begin</div>';
+        return;
+    }
+    const show = list.slice(-150);
+    box.innerHTML = show.map(a => `
+        <div class="acc-item ${a.ok ? '' : 'fail'}">
+            <span class="acc-name">${a.user}</span> &nbsp;|&nbsp; <span class="acc-pw">${a.pw}</span>
+            <button class="copy-sm" onclick="navigator.clipboard.writeText('${a.user}:${a.pw}')">copy</button>
+            <div style="color:#555;font-size:10px">${a.email}</div>
+            ${a.uid ? `<div style="color:#555;font-size:10px">ID: ${a.uid}</div>` : ''}
+            <div class="acc-status ${a.ok ? '' : 'fail'}">${a.ok ? '✓ registered' : '✗ ' + (a.err || 'failed')}</div>
+        </div>
+    `).join('');
+}
+
+function stopGen() {
+    stopReq = true;
+    running = false;
+    document.getElementById('runStatus').textContent = 'stopped';
+    document.getElementById('runStatus').style.color = '#e74c3c';
+    log('Generation stopped', 'error');
+}
+
+async function startGen() {
+    if (running) {
+        log('Already running', 'error');
+        return;
+    }
+    if (typeof PlayerIO === 'undefined') {
+        log('playerio.js not loaded!', 'error');
+        return;
+    }
+    stopReq = false;
+    running = true;
+    document.getElementById('runStatus').textContent = 'running';
+    document.getElementById('runStatus').style.color = '#27ae60';
+
+    const count = parseInt(document.getElementById('accountCount').value) || 10;
+    const pfx = document.getElementById('usernamePrefix').value || 'player_';
+    const domain = document.getElementById('emailDomain').value || '@example.com';
+    const fixedPw = document.getElementById('customPassword').value;
+    const useDelay = document.getElementById('delayMode').checked;
+    const delay = parseInt(document.getElementById('delayMs').value) || 500;
+    const restart = parseInt(document.getElementById('autoRestart').value);
+    const maxBatches = restart === -1 ? Infinity : restart + 1;
+
+    log(`Starting — ${count} accounts/batch, delay: ${useDelay ? delay + 'ms' : 'none'}`, 'info');
+    document.getElementById('progressWrap').style.display = 'block';
+
+    let batch = 0;
+    while (batch < maxBatches && !stopReq) {
+        batchNum = batch;
+        batch++;
+        log(`Batch #${batch} starting...`);
+        for (let i = 0; i < count && !stopReq; i++) {
+            const pct = Math.round((i + 1) / count * 100);
+            document.getElementById('progressBar').style.width = pct + '%';
+            document.getElementById('progressLabel').textContent = `Batch ${batch}: ${pct}%`;
+            const user = genUser(pfx, i + 1);
+            const pw = fixedPw || genPw();
+            const email = user + domain;
+            try {
+                const r = await regAccount(user, email, pw);
+                stats.t++;
+                stats.ok++;
+                accounts.push({user, pw, email, uid: r.userId, ok: true});
+                log(`✓ ${user} (${r.userId})`, 'success');
+            } catch (e) {
+                stats.t++;
+                stats.fail++;
+                const msg = e.code ? `${e.code}: ${e.message}` : (e.message || 'error');
+                accounts.push({user, pw, email, ok: false, err: msg});
+                log(`✗ ${user} — ${msg}`, 'error');
+                if (e.code === 'QuickConnectMethodNotEnabled') {
+                    log('Disable CAPTCHA in Player.IO admin panel!', 'error');
+                    stopGen();
+                    break;
+                }
+            }
+            updateStats();
+            renderAccs();
+            if (useDelay && delay > 0 && i < count - 1 && !stopReq) await wait(delay);
+        }
+        document.getElementById('progressBar').style.width = '100%';
+        if (!stopReq && batch < maxBatches) {
+            log('Batch complete — waiting 2s...');
+            await wait(2000);
+        }
+    }
+
+    running = false;
+    document.getElementById('progressWrap').style.display = 'none';
+    document.getElementById('runStatus').textContent = 'idle';
+    document.getElementById('runStatus').style.color = '#555';
+    log(`Done. ${stats.ok} success, ${stats.fail} failed.`, 'info');
+}
+
+function clearAll() {
+    if (running) {
+        log('Stop first', 'error');
+        return;
+    }
+    accounts = [];
+    stats = {t: 0, ok: 0, fail: 0};
+    batchNum = 0;
+    updateStats();
+    renderAccs();
+    log('Cleared');
+}
+
+function exportJSON() {
+    const ok = accounts.filter(a => a.ok);
+    const blob = new Blob([JSON.stringify({
+        generatedAt: new Date().toISOString(),
+        gameId: 'chat-n-trade-rbghucl340khyqqaai8q',
+        accounts: ok,
+        stats
+    }, null, 2)], {type: 'application/json'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `accounts_${Date.now()}.json`;
+    a.click();
+    log(`Exported ${ok.length} accounts`, 'success');
+}
+
+function copyAll() {
+    const ok = accounts.filter(a => a.ok);
+    if (!ok.length) {
+        log('No successful accounts', 'error');
+        return;
+    }
+    navigator.clipboard.writeText(ok.map(a => `${a.user}:${a.pw}`).join('\n'));
+    log(`Copied ${ok.length} accounts to clipboard`, 'success');
+}
+
+document.getElementById('delayMode').addEventListener('change', function() {
+    document.getElementById('delayWrap').style.display = this.checked ? 'block' : 'none';
 });
 
-window.addEventListener('load',()=>{
-  if(typeof PlayerIO==='undefined')log('playerio.js not loaded — make sure it is in the same folder','error');
-  else log('Player.IO SDK ready','success');
+window.addEventListener('load', () => {
+    if (typeof PlayerIO === 'undefined') log('playerio.js not loaded — make sure it is in the same folder', 'error');
+    else log('Player.IO SDK ready', 'success');
 });
 </script>
+</body>
+</html>
